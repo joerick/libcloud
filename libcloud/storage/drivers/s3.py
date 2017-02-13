@@ -19,6 +19,7 @@ import time
 import sys
 
 from hashlib import sha1
+from collections import OrderedDict
 
 try:
     from lxml.etree import Element, SubElement
@@ -525,7 +526,9 @@ class BaseS3StorageDriver(StorageDriver):
         bytes_transferred = 0
         count = 1
         chunks = []
-        params = {'uploadId': upload_id}
+        params = OrderedDict()
+        params['partNumber'] = 0
+        params['uploadId'] = upload_id
 
         # Read the input data in chunk sizes suitable for AWS
         for data in read_in_chunks(iterator, chunk_size=CHUNK_SIZE,
